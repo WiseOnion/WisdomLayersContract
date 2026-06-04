@@ -18,14 +18,22 @@
         }
 
         /* PRINT BUTTON */
-        .print-bar { text-align: center; padding: 16px 0 12px; }
+        .print-bar {
+            position: fixed; bottom: 24px; right: 24px; z-index: 999;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+        }
         .print-bar button {
             font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 10pt;
             background: #0d9488; color: white; border: none; border-radius: 6px;
-            padding: 10px 32px; cursor: pointer; letter-spacing: 0.02em;
+            padding: 10px 24px; cursor: pointer; letter-spacing: 0.02em;
+            box-shadow: 0 4px 16px rgba(13,148,136,0.4);
         }
         .print-bar button:hover { background: #0f766e; }
-        .print-hint { font-size: 8pt; color: #6b7280; margin-top: 6px; }
+        .print-hint {
+            font-size: 7.5pt; color: #6b7280; background: white;
+            padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 320px; text-align: right;
+        }
 
         /* PAGE WRAPPER */
         .page {
@@ -287,8 +295,8 @@
 <body>
 
 <div class="print-bar">
-    <button onclick="window.print()">&#128424; Print / Save as PDF</button>
-    <p class="print-hint">Print dialog &rarr; Paper: <strong>Letter</strong> &rarr; Margins: <strong>Default</strong> &rarr; Scale: <strong>100%</strong> &rarr; &#9989; Background graphics</p>
+    <button onclick="window.print()">Save as PDF</button>
+    <p class="print-hint">Set destination to <strong>Save as PDF</strong>, Paper <strong>Letter</strong>, check <strong>Background graphics</strong></p>
 </div>
 
 <div class="page">
