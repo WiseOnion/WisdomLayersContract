@@ -287,7 +287,8 @@
 <body>
 
 <div class="print-bar">
-    <button onclick="window.print()">Save as PDF</button>
+    <button onclick="window.print()">&#128424; Print / Save as PDF</button>
+    <p class="print-hint">Print dialog &rarr; Paper: <strong>Letter</strong> &rarr; Margins: <strong>Default</strong> &rarr; Scale: <strong>100%</strong> &rarr; &#9989; Background graphics</p>
 </div>
 
 <div class="page">
@@ -341,25 +342,25 @@
     <div class="sheet-body" style="padding:32px 60px;">
 
         <!-- TABLE OF CONTENTS -->
-        <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:24px 28px;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
-            <div style="font-family:'Poppins',sans-serif;font-size:10pt;font-weight:700;color:#0d9488;border-bottom:2px solid #0d9488;padding-bottom:10px;margin-bottom:16px;">Table of Contents</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 36px;">
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">1.</span>Parties</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">9.</span>CAN-SPAM Compliance</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">2.</span>Services</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">10.</span>Tools Provided by Company</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">3.</span>Independent Contractor Status</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">11.</span>Termination</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">4.</span>Compensation</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">12.</span>Tax Responsibilities & W-8BEN</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">5.</span>Ownership of Work Product</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">13.</span>Indemnification</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">6.</span>Confidentiality</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">14.</span>Governing Law & Dispute Resolution</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">7.</span>Non-Solicitation</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">15.</span>Electronic Signatures</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">8.</span>Conduct & Representation</div>
-                <div style="font-size:8.5pt;color:#475569;line-height:1.75;"><span style="color:#0d9488;font-weight:700;margin-right:5px;">16.</span>Entire Agreement + Signatures</div>
+        <div class="toc">
+            <div class="toc-title">Table of Contents</div>
+            <div class="toc-grid">
+                <div class="toc-item"><span>1.</span>Parties</div>
+                <div class="toc-item"><span>9.</span>CAN-SPAM Compliance</div>
+                <div class="toc-item"><span>2.</span>Services</div>
+                <div class="toc-item"><span>10.</span>Tools Provided by Company</div>
+                <div class="toc-item"><span>3.</span>Independent Contractor Status</div>
+                <div class="toc-item"><span>11.</span>Termination</div>
+                <div class="toc-item"><span>4.</span>Compensation</div>
+                <div class="toc-item"><span>12.</span>Tax Responsibilities &amp; W-8BEN</div>
+                <div class="toc-item"><span>5.</span>Ownership of Work Product</div>
+                <div class="toc-item"><span>13.</span>Indemnification</div>
+                <div class="toc-item"><span>6.</span>Confidentiality</div>
+                <div class="toc-item"><span>14.</span>Governing Law &amp; Dispute Resolution</div>
+                <div class="toc-item"><span>7.</span>Non-Solicitation</div>
+                <div class="toc-item"><span>15.</span>Electronic Signatures</div>
+                <div class="toc-item"><span>8.</span>Conduct &amp; Representation</div>
+                <div class="toc-item"><span>16.</span>Entire Agreement + Signatures</div>
             </div>
         </div>
 
@@ -805,10 +806,6 @@ function clearSig(id) {
 initPad('sig-contractor');
 initPad('sig-wisdom');
 
-// Auto-open print dialog when page loads (after short delay so page renders fully)
-window.addEventListener('load', function() {
-    setTimeout(function() { window.print(); }, 800);
-});
 </script>
 </body>
 </html>
