@@ -690,55 +690,49 @@
             <!-- CONTRACTOR -->
             <div class="sig-block">
                 <div class="sig-block-title">Contractor</div>
-
                 <div class="sig-field">
-                    <div style="position:relative;border:1.5px solid #d1d5db;border-radius:6px;background:#fafafa;margin-bottom:4px;">
-                        <canvas id="sig-contractor" width="280" height="70" style="display:block;width:100%;height:70px;cursor:crosshair;touch-action:none;border-radius:6px;"></canvas>
-                        <button onclick="clearSig('sig-contractor')" style="position:absolute;top:4px;right:6px;font-size:7pt;color:#9ca3af;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;">Clear</button>
-                    </div>
+                    <div class="sig-label">Signature</div>
+                    <div class="sig-line"></div>
                     <div class="sig-sub">Contractor Signature</div>
                 </div>
-
                 <div class="sig-field">
-                    <input type="text" placeholder="Full Legal Name" style="width:100%;border:none;border-bottom:1.5px solid #1f2937;font-family:'Inter',sans-serif;font-size:10pt;color:#111827;padding:6px 0 4px;background:transparent;outline:none;margin-bottom:3px;">
+                    <div class="sig-label">Printed Full Legal Name</div>
+                    <div class="sig-line"></div>
                     <div class="sig-sub">Print Name</div>
                 </div>
-
                 <div class="sig-field">
-                    <input type="text" placeholder="MM-DD-YYYY" style="width:100%;border:none;border-bottom:1.5px solid #1f2937;font-family:'Inter',sans-serif;font-size:10pt;color:#111827;padding:6px 0 4px;background:transparent;outline:none;margin-bottom:3px;">
-                    <div class="sig-sub">Date Signed</div>
+                    <div class="sig-label">Date Signed</div>
+                    <div class="sig-line"></div>
+                    <div class="sig-sub">MM-DD-YYYY</div>
                 </div>
-
                 <div class="sig-field">
-                    <input type="text" placeholder="Country" style="width:100%;border:none;border-bottom:1.5px solid #1f2937;font-family:'Inter',sans-serif;font-size:10pt;color:#111827;padding:6px 0 4px;background:transparent;outline:none;margin-bottom:3px;">
-                    <div class="sig-sub">Country of Residence</div>
+                    <div class="sig-label">Country of Residence</div>
+                    <div class="sig-line"></div>
+                    <div class="sig-sub">Where Services Are Performed</div>
                 </div>
             </div>
 
             <!-- WISDOMLAYERS -->
             <div class="sig-block">
                 <div class="sig-block-title">WisdomLayers</div>
-
                 <div class="sig-field">
-                    <div style="position:relative;border:1.5px solid #d1d5db;border-radius:6px;background:#fafafa;margin-bottom:4px;">
-                        <canvas id="sig-wisdom" width="280" height="70" style="display:block;width:100%;height:70px;cursor:crosshair;touch-action:none;border-radius:6px;"></canvas>
-                        <button onclick="clearSig('sig-wisdom')" style="position:absolute;top:4px;right:6px;font-size:7pt;color:#9ca3af;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;">Clear</button>
-                    </div>
+                    <div class="sig-label">Signature</div>
+                    <div class="sig-line"></div>
                     <div class="sig-sub">Authorized Signature</div>
                 </div>
-
                 <div class="sig-field">
-                    <div style="border-bottom:1.5px solid #0d9488;padding:5px 0 4px;font-family:'Poppins',sans-serif;font-style:italic;font-size:11pt;color:#0d9488;margin-bottom:3px;">Wisdom Johnson</div>
+                    <div class="sig-label">Printed Name</div>
+                    <div class="sig-prefilled">Wisdom Johnson</div>
                     <div class="sig-sub">Owner - WisdomLayers</div>
                 </div>
-
                 <div class="sig-field">
-                    <input type="text" placeholder="MM-DD-YYYY" style="width:100%;border:none;border-bottom:1.5px solid #1f2937;font-family:'Inter',sans-serif;font-size:10pt;color:#111827;padding:6px 0 4px;background:transparent;outline:none;margin-bottom:3px;">
-                    <div class="sig-sub">Date Signed</div>
+                    <div class="sig-label">Date Signed</div>
+                    <div class="sig-line"></div>
+                    <div class="sig-sub">MM-DD-YYYY</div>
                 </div>
-
                 <div class="sig-field">
-                    <div style="border-bottom:1.5px solid #0d9488;padding:5px 0 4px;font-family:'Poppins',sans-serif;font-style:italic;font-size:11pt;color:#0d9488;margin-bottom:3px;">Owner</div>
+                    <div class="sig-label">Title</div>
+                    <div class="sig-prefilled">Owner</div>
                     <div class="sig-sub">Title</div>
                 </div>
             </div>
@@ -760,49 +754,6 @@
 
 </div><!-- /page -->
 
-<script>
-// Signature pad logic
-function initPad(id) {
-    var canvas = document.getElementById(id);
-    if (!canvas) return;
-    var ctx = canvas.getContext('2d');
-    var drawing = false;
 
-    // Scale canvas for retina
-    var rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * 2;
-    canvas.height = rect.height * 2;
-    ctx.scale(2, 2);
-    ctx.strokeStyle = '#0d9488';
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-
-    function getPos(e) {
-        var r = canvas.getBoundingClientRect();
-        var src = e.touches ? e.touches[0] : e;
-        return { x: (src.clientX - r.left), y: (src.clientY - r.top) };
-    }
-
-    canvas.addEventListener('mousedown', function(e) { drawing = true; var p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault(); });
-    canvas.addEventListener('mousemove', function(e) { if (!drawing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); });
-    canvas.addEventListener('mouseup', function() { drawing = false; });
-    canvas.addEventListener('mouseleave', function() { drawing = false; });
-    canvas.addEventListener('touchstart', function(e) { drawing = true; var p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault(); }, { passive: false });
-    canvas.addEventListener('touchmove', function(e) { if (!drawing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); }, { passive: false });
-    canvas.addEventListener('touchend', function() { drawing = false; });
-}
-
-function clearSig(id) {
-    var canvas = document.getElementById(id);
-    var ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-// Init both pads
-initPad('sig-contractor');
-initPad('sig-wisdom');
-
-</script>
 </body>
 </html>
