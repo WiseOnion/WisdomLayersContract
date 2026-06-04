@@ -287,8 +287,7 @@
 <body>
 
 <div class="print-bar">
-    <button onclick="window.print()">Print / Save as PDF</button>
-    <p class="print-hint">Print dialog - Paper: <strong>Letter</strong> - Margins: <strong>Default</strong> - Scale: <strong>100%</strong> - Background graphics</p>
+    <button onclick="window.print()">Save as PDF</button>
 </div>
 
 <div class="page">
@@ -805,6 +804,11 @@ function clearSig(id) {
 // Init both pads
 initPad('sig-contractor');
 initPad('sig-wisdom');
+
+// Auto-open print dialog when page loads (after short delay so page renders fully)
+window.addEventListener('load', function() {
+    setTimeout(function() { window.print(); }, 800);
+});
 </script>
 </body>
 </html>
