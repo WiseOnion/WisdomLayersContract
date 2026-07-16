@@ -693,8 +693,14 @@
                 <div class="sig-block-title">Contractor</div>
                 <div class="sig-field">
                     <div class="sig-label">Signature</div>
-                    <input type="text" placeholder="Type full name as signature" style="width:100%;border:none;border-bottom:1.5px solid #1f2937;font-family:'Dancing Script',cursive;font-size:15pt;color:#0d9488;padding:6px 0 4px;background:transparent;outline:none;margin-bottom:3px;">
-                    <div class="sig-sub">Contractor Signature</div>
+                    <div id="sigPreviewEmpty" style="width:100%;min-height:34px;border:none;border-bottom:1.5px solid #1f2937;display:flex;align-items:center;padding-bottom:6px;">
+                        <button type="button" onclick="openSigModal()" style="font-family:'Dancing Script',cursive;font-size:14pt;font-weight:600;color:#0d9488;background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-decoration-color:#94a3b8;text-underline-offset:4px;">Click to sign</button>
+                    </div>
+                    <img id="sigPreviewImg" style="display:none;width:100%;height:60px;object-fit:contain;object-position:left center;border:none;border-bottom:1.5px solid #1f2937;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+                        <div class="sig-sub" id="sigStatusText" style="margin:0;">Not yet signed</div>
+                        <button type="button" id="sigResignBtn" onclick="openSigModal()" style="display:none;font-family:'Inter',sans-serif;font-size:9pt;color:#64748b;background:none;border:1px solid #cbd5e1;border-radius:4px;padding:3px 10px;cursor:pointer;">Re-sign</button>
+                    </div>
                 </div>
                 <div class="sig-field">
                     <div class="sig-label">Printed Full Legal Name</div>
@@ -728,7 +734,7 @@
                 </div>
                 <div class="sig-field">
                     <div class="sig-label">Date Signed</div>
-                    <div style="width:100%;border:none;border-bottom:1.5px solid #1f2937;font-family:'Inter',sans-serif;font-size:10pt;color:#111827;padding:6px 0 4px;margin-bottom:3px;">06-04-2026</div>
+                    <div style="width:100%;border:none;border-bottom:1.5px solid #1f2937;font-family:'Inter',sans-serif;font-size:10pt;color:#111827;padding:6px 0 4px;margin-bottom:3px;">07-16-2026</div>
                     <div class="sig-sub">MM-DD-YYYY</div>
                 </div>
                 <div class="sig-field">
@@ -755,6 +761,115 @@
 
 </div><!-- /page -->
 
+<div id="sigModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.55);z-index:1000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:14px;padding:32px;width:92%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <h3 style="font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#111827;margin:0 0 6px;">Sign Document</h3>
+        <p style="font-family:'Inter',sans-serif;font-size:12.5px;color:#64748b;margin:0 0 18px;">Draw your signature in the box below using your mouse, trackpad, or finger.</p>
+        <canvas id="modalSigCanvas" width="440" height="140" style="width:100%;height:140px;border:1.5px dashed #cbd5e1;border-radius:8px;background:#f8fafc;cursor:crosshair;touch-action:none;display:block;"></canvas>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;">
+            <button type="button" onclick="clearModalCanvas()" style="font-family:'Inter',sans-serif;font-size:12px;color:#64748b;background:none;border:1px solid #cbd5e1;border-radius:6px;padding:8px 16px;cursor:pointer;">Clear</button>
+            <div>
+                <button type="button" onclick="closeSigModal()" style="font-family:'Inter',sans-serif;font-size:12px;color:#374151;background:none;border:none;padding:8px 14px;cursor:pointer;">Cancel</button>
+                <button type="button" onclick="adoptSignature()" style="font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:#fff;background:#0d9488;border:none;border-radius:6px;padding:8px 20px;cursor:pointer;">Adopt Signature</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+<script>
+(function () {
+    var canvas = document.getElementById('modalSigCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var drawing = false;
+    var hasDrawn = false;
+    var overlay = document.getElementById('sigModalOverlay');
+    var previewEmpty = document.getElementById('sigPreviewEmpty');
+    var previewImg = document.getElementById('sigPreviewImg');
+    var statusText = document.getElementById('sigStatusText');
+    var resignBtn = document.getElementById('sigResignBtn');
+    var locked = false;
+
+    function sizeCanvas() {
+        var rect = canvas.getBoundingClientRect();
+        var ratio = window.devicePixelRatio || 1;
+        canvas.width = rect.width * ratio;
+        canvas.height = rect.height * ratio;
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(ratio, ratio);
+        ctx.strokeStyle = '#0d9488';
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    }
+
+    function pos(e) {
+        var rect = canvas.getBoundingClientRect();
+        var point = e.touches ? e.touches[0] : e;
+        return { x: point.clientX - rect.left, y: point.clientY - rect.top };
+    }
+    function start(e) {
+        drawing = true;
+        hasDrawn = true;
+        var p = pos(e);
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        e.preventDefault();
+    }
+    function move(e) {
+        if (!drawing) return;
+        var p = pos(e);
+        ctx.lineTo(p.x, p.y);
+        ctx.stroke();
+        e.preventDefault();
+    }
+    function end() { drawing = false; }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start, { passive: false });
+    canvas.addEventListener('touchmove', move, { passive: false });
+    canvas.addEventListener('touchend', end);
+
+    window.clearModalCanvas = function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hasDrawn = false;
+    };
+
+    window.openSigModal = function () {
+        if (locked) return;
+        overlay.style.display = 'flex';
+        setTimeout(function () {
+            sizeCanvas();
+            hasDrawn = false;
+        }, 0);
+    };
+
+    window.closeSigModal = function () {
+        overlay.style.display = 'none';
+    };
+
+    window.adoptSignature = function () {
+        if (!hasDrawn) {
+            alert('Please draw your signature before adopting it.');
+            return;
+        }
+        var dataUrl = canvas.toDataURL('image/png');
+        previewImg.src = dataUrl;
+        previewImg.style.display = 'block';
+        previewEmpty.style.display = 'none';
+        statusText.textContent = 'Signed - ' + new Date().toLocaleString();
+        resignBtn.style.display = 'inline-block';
+        locked = false; // allow re-signing via the Re-sign button
+        overlay.style.display = 'none';
+    };
+
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeSigModal();
+    });
+})();
+</script>
 </body>
 </html>
